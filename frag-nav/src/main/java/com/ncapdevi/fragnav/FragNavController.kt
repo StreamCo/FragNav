@@ -287,13 +287,20 @@ class FragNavController constructor(private val fragmentManger: FragmentManager,
      *
      * @param fragment           The fragment that is to be pushed
      * @param transactionOptions Transaction options to be displayed
+     * @param remove             If false do not remove the current fragment but show the new one
+     *                           over top of it.
      */
     @JvmOverloads
-    fun pushFragment(fragment: Fragment?, transactionOptions: FragNavTransactionOptions? = defaultTransactionOptions) {
+    fun pushFragment(
+            fragment: Fragment?,
+            transactionOptions: FragNavTransactionOptions? = defaultTransactionOptions,
+            remove: Boolean = true) {
         if (fragment != null && currentStackIndex != NO_TAB) {
             val ft = createTransactionWithOptions(transactionOptions, false)
 
-            removeCurrentFragment(ft, shouldDetachAttachOnPushPop(), shouldRemoveAttachOnSwitch())
+            if (remove) {
+                removeCurrentFragment(ft, shouldDetachAttachOnPushPop(), shouldRemoveAttachOnSwitch())
+            }
 
             val fragmentTag = generateTag(fragment)
             fragmentStacksTags[currentStackIndex].push(fragmentTag)
